@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>发送消息到 Discord</title>
+</head>
+<body>
+    <form id="discordForm">
+        <label for="webhookUrl">Webhook URL:</label>
+        <input type="text" id="webhookUrl" name="webhookUrl" placeholder="在这里输入Webhook URL">
+        <br><br>
+        <label for="message">消息:</label>
+        <input type="text" id="message" name="content" placeholder="在这里输入消息...">
+        <br><br>
+        <input type="submit" value="发送消息">
+    </form>
+
+    <!-- 添加一个按钮来发送预设消息 -->
+    <button id="sendPreset">测试</button>
+
+    <script>
+        // 当表单提交时，阻止默认行为并发送一个 POST 请求
+        document.getElementById('discordForm').onsubmit = function(event) {
+            event.preventDefault();
+            const webhookUrl = document.getElementById('webhookUrl').value;
+            const messageInput = document.getElementById('message');
+            const formData = new FormData(event.target);
+
+            fetch(webhookUrl, {
+                method: 'POST',
+                body: formData
+            }).then(response => {
+                if (response.ok) {
+                    alert('消息发送成功！');
+                } else {
+                    alert('消息发送失败。');
+                }
+            }).catch(error => {
+                alert('发生错误：' + error.message);
+            });
+        };
+
+        // 当点击按钮时，发送预设消息 "测试"
+        document.getElementById('sendPreset').onclick = function() {
+            const webhookUrl = document.getElementById('webhookUrl').value;
+            fetch(webhookUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    content: '测试'
+                })
+            }).then(response => {
+                if (response.ok) {
+                    alert('预设消息发送成功！');
+                } else {
+                    alert('预设消息发送失败。');
+                }
+            }).catch(error => {
+                alert('发生错误：' + error.message);
+            });
+        };
+    </script>
+</body>
+</html>
