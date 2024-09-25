@@ -5,23 +5,41 @@
     <title>测试</title>
 </head>
 <body>
-    <form action="https://discord.com/api/webhooks/1288439822548992071/t690Jz2xQo_htDeQFWY88ulEOAvjlIRw_ZlRc6K6_UsY3qnJU78HYhYTNkhyxXIlKZ3s" method="post" id="discordForm">
+    <form action="" method="post" id="discordForm">
         <label for="message">消息:</label>
         <input type="text" id="message" name="content" placeholder="在这里输入消息...">
         <input type="submit" value="发送消息">
     </form>
 
-    <!-- 添加一个按钮来发送预设消息 -->
+    <!-- 添加按钮来发送预设消息 -->
     <button id="sendPreset">完成</button>
+    <br>
+    <button id="sendPreset1">备用1</button>
+    <br>
+    <button id="sendPreset2">备用2</button>
+    <br>
+    <button id="sendPreset3">备用3</button>
+    <br>
+    <button id="sendPreset4">备用4</button>
 
     <script>
+        const webhookUrl = 'https://discord.com/api/webhooks/1288439822548992071/t690Jz2xQo_htDeQFWY88ulEOAvjlIRw_ZlRc6K6_UsY3qnJU78HYhYTNkhyxXIlKZ3s';
+
         // 当表单提交时，阻止默认行为并发送一个 POST 请求
         document.getElementById('discordForm').onsubmit = function(event) {
             event.preventDefault();
             var formData = new FormData(event.target);
-            fetch(this.action, {
+            sendToDiscord(formData.get('content'));
+        };
+
+        // 发送到 Discord 的函数
+        function sendToDiscord(content) {
+            fetch(webhookUrl, {
                 method: 'POST',
-                body: formData
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ content: content })
             }).then(response => {
                 if (response.ok) {
                     alert('消息发送成功！');
@@ -31,28 +49,18 @@
             }).catch(error => {
                 alert('发生错误：' + error.message);
             });
-        };
+        }
 
-        // 当点击按钮时，发送预设消息 "测试"
-        document.getElementById('sendPreset').onclick = function() {
-            fetch('https://discord.com/api/webhooks/1288439822548992071/t690Jz2xQo_htDeQFWY88ulEOAvjlIRw_ZlRc6K6_UsY3qnJU78HYhYTNkhyxXIlKZ3s', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    content: '完成'
-                })
-            }).then(response => {
-                if (response.ok) {
-                    alert('预设消息发送成功！');
-                } else {
-                    alert('预设消息发送失败。');
-                }
-            }).catch(error => {
-                alert('发生错误：' + error.message);
-            });
-        };
+        // 设置预设消息按钮的点击事件
+        ['sendPreset', 'sendPreset1', 'sendPreset2', 'sendPreset3', 'sendPreset4'].forEach(buttonId => {
+            document.getElementById(buttonId).onclick = function() {
+                let content = this.id === 'sendPreset' ? '完成' :
+                             this.id === 'sendPreset1' ? '测试1' :
+                             this.id === 'sendPreset2' ? '测试2' :
+                             this.id === 'sendPreset3' ? '测试3' : '测试4';
+                sendToDiscord(content);
+            };
+        });
     </script>
 </body>
 </html>
