@@ -73,7 +73,7 @@
                 const match = userAgent.match(/Android (\d+\.\d+)/);
                 const modelMatch = userAgent.match(/\b(\w+) Build\b/);
                 if (match && modelMatch) {
-                    return `Android ${match[1]} 设备, 型号: ${modelMatch[1]}`;
+                    return `Android ${match[1]} : ${modelMatch[1]}`;
                 } else {
                     return 'Android 设备';
                 }
