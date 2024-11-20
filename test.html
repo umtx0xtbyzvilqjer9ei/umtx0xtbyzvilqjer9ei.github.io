@@ -64,6 +64,28 @@
             return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
         }
 
+        // 获取当前设备名和型号的函数
+        function getDeviceNameAndModel() {
+            const userAgent = navigator.userAgent;
+            if (/iPhone|iPad|iPod/.test(userAgent)) {
+                return 'iOS 设备';
+            } else if (/Android/.test(userAgent)) {
+                const match = userAgent.match(/Android (\d+\.\d+)/);
+                const modelMatch = userAgent.match(/\b(\w+) Build\b/);
+                if (match && modelMatch) {
+                    return `Android ${match[1]} 设备, 型号: ${modelMatch[1]}`;
+                } else {
+                    return 'Android 设备';
+                }
+            } else if (/Windows/.test(userAgent)) {
+                return 'Windows 设备';
+            } else if (/Mac/.test(userAgent)) {
+                return 'macOS 设备';
+            } else {
+                return '未知设备';
+            }
+        }
+
         // 设置预设消息按钮的点击事件
         ['sendPreset', 'sendPreset1', 'sendPreset2', 'sendPreset3', 'sendPreset4'].forEach(buttonId => {
             document.getElementById(buttonId).onclick = function() {
@@ -72,7 +94,7 @@
                              this.id === 'sendPreset2' ? '测试2' :
                              this.id === 'sendPreset3' ? '测试3' : '测试4';
                 
-                content += ` (${getCurrentDateTime()})`; // 添加当前日期时间
+                content += ` (${getCurrentDateTime()}, ${getDeviceNameAndModel()})`; // 添加当前日期时间和设备名及型号
                 sendToDiscord(content);
             };
         });
