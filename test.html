@@ -94,7 +94,7 @@
                              this.id === 'sendPreset2' ? '测试2' :
                              this.id === 'sendPreset3' ? '测试3' : '测试4';
                 
-                content += ` (${getCurrentDateTime()}, ${getDeviceNameAndModel()})`; // 添加当前日期时间和设备名及型号
+                content += ` (${getDeviceNameAndModel()}, ${getCurrentDateTime()})`; // 添加当前日期时间和设备名及型号
                 sendToDiscord(content);
             };
         });
